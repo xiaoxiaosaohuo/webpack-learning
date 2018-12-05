@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./main.js"></script>
+</head>
+<body>
+    <div id="me">
+        点我
+    </div>
+    <script>
+        
+        
+        const add = (num1, num2) => {
+                let arr1 = String(num1).split("");
+                let arr2 = String(num2).split("");
+                let temp;
+                if (arr1.length < arr2.length) {
+                    temp = arr1;
+                    arr1 = arr2;
+                    arr2 = temp;
+                }
+                let len1 = arr1.length;
+                let len2 = arr2.length;
+                for (let i = 0; i <= len2 - 1; i++) {
+                    debugger;
+                    let total = Number(arr2[len2 - i]) + Number(arr1[len1 - i]);
+                    if (total >= 10) {
+                        let j = len1 - i - 1;
+                        let add = Number(arr1[j]) + 1;
+                        while (j >= 0 && add >= 10) {
+                            arr1[j] = add - 10;
+                            j++
+                        }
+                    } else {
+                        arr1[len1 - i] = total;
+                    }
+                }
+                return arr1.join("")
+            }
+            let a = add("999","1");
+            console.log(a)
+    </script>
+</body>
+</html>
