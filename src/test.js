@@ -1,6 +1,6 @@
 // import "./b";
 export const a = 1;
-let c = "siven";
+let c = 'siven';
 // import("./b").then((res) => {
 //     c = res+a
 // })

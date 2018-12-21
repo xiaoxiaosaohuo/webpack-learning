@@ -1,0 +1,17 @@
+{
+    "extends": "eslint:recommended",
+    "parser": "babel-eslint",
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true,
+        "commonjs": true
+      },
+    "rules":{
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+  }
+  

@@ -1,1 +1,1 @@
-module.exports="联系收地"
+module.exports = '联系收地';
