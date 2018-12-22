@@ -1,7 +1,7 @@
-import test from "./test";
+import test,{a} from "./test";
 import("./a").then((res)=>{
-    let a = test+res
-    console.log(a)  
+    let output = test+res+a;
+    console.log(output);  
 })
 
 

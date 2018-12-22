@@ -207,7 +207,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _test__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./test */ \"./src/test.js\");\n\n__webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./a */ \"./src/a.js\")).then((res)=>{\n    let a = _test__WEBPACK_IMPORTED_MODULE_0__[\"default\"]+res\n    console.log(a)  \n})\n\n\n\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _test__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./test */ \"./src/test.js\");\n\n__webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./a */ \"./src/a.js\")).then((res)=>{\n    let output = _test__WEBPACK_IMPORTED_MODULE_0__[\"default\"]+res+_test__WEBPACK_IMPORTED_MODULE_0__[\"a\"];\n    console.log(output);  \n})\n\n\n\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ }),
 
@@ -215,11 +215,11 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _tes
 /*!*********************!*\
   !*** ./src/test.js ***!
   \*********************/
-/*! exports provided: default */
+/*! exports provided: a, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\nconst a = 1;\nlet c = null;\n__webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./b */ \"./src/b.js\")).then((res) => {\n    c = res+a\n})\n/* harmony default export */ __webpack_exports__[\"default\"] = (c);\n\n//# sourceURL=webpack:///./src/test.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"a\", function() { return a; });\nconst a = 1;\nlet c = null;\n__webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./b */ \"./src/b.js\")).then((res) => {\n    c = res+a\n})\n/* harmony default export */ __webpack_exports__[\"default\"] = (c);\n\n//# sourceURL=webpack:///./src/test.js?");
 
 /***/ })
 
