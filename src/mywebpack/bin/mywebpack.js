@@ -1,13 +1,13 @@
 #! /usr/bin/env node
 
-//入口
+// 入口
 
-let entry = "../index.js";
-let output = "../../dist/app.js";
-const fs = require("fs");
-let script  = fs.readFileSync(entry,"utf-8");
-let ascript = script.replace(/import *\(['"](.+?)['"]\)/g,function(){
-    console.log(arguments)
+let entry = '../index.js';
+let output = '../../dist/app.js';
+const fs = require('fs');
+let script = fs.readFileSync(entry, 'utf-8');
+let ascript = script.replace(/import *\(['"](.+?)['"]\)/g, function () {
+  console.log(arguments);
 });
 
 let template = `
@@ -34,4 +34,4 @@ let template = `
 })
 `;
 
-fs.writeFileSync(output,template)
+fs.writeFileSync(output, template);

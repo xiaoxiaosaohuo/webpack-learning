@@ -1,2 +1,2 @@
-export const split = "split";
+const split = 'split';
 export default split;
