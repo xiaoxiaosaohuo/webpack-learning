@@ -1,8 +1,6 @@
-import './index.css';
-
-import test, { a } from './test';
-console.log(test, a);
-// import("./a").then((res)=>{
-//     let a = test+res
-//     console.log(a)
-// })
+import b from './b';
+import("./a")
+    .then((res) => {
+        console.log
+    })
+let a = b+1;

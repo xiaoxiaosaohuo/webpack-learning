@@ -3,17 +3,17 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 debugger;
 module.exports = {
   mode: "development",
-  devtool: "source-maps",
+  // devtool: "source-maps",
   entry: {
     app: "./src/index.js"
   },
-  optimization: {
-    flagIncludedChunks: true,
-    minimize: false,
-    runtimeChunk: {
-      name: "manifest"
-    }
-  },
+  // optimization: {
+  //   flagIncludedChunks: true,
+  //   minimize: false,
+  //   runtimeChunk: {
+  //     name: "manifest"
+  //   }
+  // },
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist")
