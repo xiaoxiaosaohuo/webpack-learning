@@ -1,7 +1,6 @@
+// import a from "./a"
+// const   text  =  require('../src/assets/1.txt');
+// console.log(text)
+const a = 1;
 
-import b from './b';
-import("./a")
-    .then((res) => {
-        console.log
-    })
-let a = b+1;
+
