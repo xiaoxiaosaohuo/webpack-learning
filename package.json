@@ -31,15 +31,14 @@
     ],
     "*.@(js|jsx)": [
       "prettier --write",
+      "eslint ./src",
       "eslint --fix --quiet",
-      "git add",
-      "jest --bail --findRelatedTests"
+      "git add"
     ],
     "*.@(ts|tsx)": [
       "prettier --write --parser typescript",
       "tslint --fix -c tslint.json",
-      "git add",
-      "jest --bail --findRelatedTests"
+      "git add"
     ]
   },
   "author": "",
