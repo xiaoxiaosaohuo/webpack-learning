@@ -1,5 +1,6 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ManifestPlugin = require("./src/manifestPlugin");
 debugger;
 module.exports = {
   mode: "development",
@@ -15,16 +16,17 @@ module.exports = {
   //   }
   // },
   output: {
-    filename: "[name].bundle.js",
+    filename: "[name].[chunkhash].js",
     path: path.resolve(__dirname, "dist")
   },
-  plugins:[
+  plugins: [
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: "[name].css",
       chunkFilename: "[id].css"
-    })
+    }),
+    new ManifestPlugin()
   ],
   module: {
     rules: [
@@ -36,7 +38,7 @@ module.exports = {
             options: {
               // you can specify a publicPath here
               // by default it use publicPath in webpackOptions.output
-              publicPath: '../'
+              publicPath: "../"
             }
           },
           "css-loader"
