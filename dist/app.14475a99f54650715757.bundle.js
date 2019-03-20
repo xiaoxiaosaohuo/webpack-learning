@@ -90,11 +90,10 @@
   /******/ /******/ /******/ __webpack_require__.e = function requireEnsure(
     chunkId
   ) {
-    /******/ var promises = []; // JSONP chunk loading for javascript
+    /******/ var promises = []; /******/ // JSONP chunk loading for javascript
     /******/
     /******/
-    /******/ /******/
-    /******/ var installedChunkData = installedChunks[chunkId];
+    /******/ /******/ var installedChunkData = installedChunks[chunkId];
     /******/ if (installedChunkData !== 0) {
       // 0 means "already installed".
       /******/
