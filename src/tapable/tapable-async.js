@@ -7,34 +7,31 @@
  * @FilePath: /webpack-learning/src/tapable/tapable-async.js
  */
 const { AsyncSeriesHook } = require("tapable");
-const hook = new AsyncSeriesHook(['name']);
+const hook = new AsyncSeriesHook(["name"]);
 
-hook.tapAsync('first', (name, callback) => {
-    console.log('first', name, callback);
-    // 继续执行 second 事件回调
-    callback();
-  });
-  
-  hook.tapAsync('second', (name, callback) => {
-    console.log('second', name, callback);
-    // 执行 callAsync 传入的回调
-    // 第二个参数传入没有效果，因为 Sync 类型的 Hook 不对第二个参数做处理
-    callback('second error', 'second result');
-  });
-  
-  hook.tapAsync('third', (name, callback) => {
-    console.log('third', name, callback);
-    callback('third');
-  });
-  
-  // 错误优先回调
-  // result 打印 undefined
-  hook.callAsync('callAsync', (error, result) => {
-      console.log('callAsync', error, result);
-  });
+hook.tapAsync("first", (name, callback) => {
+  console.log("first", name, callback);
+  // 继续执行 second 事件回调
+  callback();
+});
 
+hook.tapAsync("second", (name, callback) => {
+  console.log("second", name, callback);
+  // 执行 callAsync 传入的回调
+  // 第二个参数传入没有效果，因为 Sync 类型的 Hook 不对第二个参数做处理
+  callback("second error", "second result");
+});
 
+hook.tapAsync("third", (name, callback) => {
+  console.log("third", name, callback);
+  callback("third");
+});
 
+// 错误优先回调
+// result 打印 undefined
+hook.callAsync("callAsync", (error, result) => {
+  console.log("callAsync", error, result);
+});
 
 //   (function anonymous(name, _callback
 //     ) {
@@ -71,5 +68,5 @@ hook.tapAsync('first', (name, callback) => {
 //             _next0();
 //         }
 //     });
-    
+
 // })
