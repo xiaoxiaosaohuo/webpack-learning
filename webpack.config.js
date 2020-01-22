@@ -1,3 +1,10 @@
+/*
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-07-29 00:03:55
+ * @LastEditTime: 2019-09-04 19:54:04
+ * @LastEditors: Please set LastEditors
+ */
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 // const ManifestPlugin = require("./src/manifestPlugin");
