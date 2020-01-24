@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2020-01-22 11:40:17
- * @LastEditTime: 2020-01-22 11:41:16
- * @LastEditors: your name
+ * @LastEditTime : 2020-01-23 11:10:42
+ * @LastEditors  : Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /webpack-learning/src/tapable/tapable-async.js
  */
@@ -10,21 +10,20 @@ const { AsyncSeriesHook } = require("tapable");
 const hook = new AsyncSeriesHook(["name"]);
 
 hook.tapAsync("first", (name, callback) => {
-  console.log("first", name, callback);
+  console.log("first", name);
   // 继续执行 second 事件回调
   callback();
 });
 
 hook.tapAsync("second", (name, callback) => {
-  console.log("second", name, callback);
+  console.log("second", name);
   // 执行 callAsync 传入的回调
-  // 第二个参数传入没有效果，因为 Sync 类型的 Hook 不对第二个参数做处理
   callback("second error", "second result");
 });
 
 hook.tapAsync("third", (name, callback) => {
-  console.log("third", name, callback);
-  callback("third");
+  console.log("third", name);
+  callback(null,"third");
 });
 
 // 错误优先回调
