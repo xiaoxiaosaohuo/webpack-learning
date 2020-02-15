@@ -38,16 +38,16 @@ hook.call('tapable', 'siven')
 // 	};
 // }
 
-// (function anonymous(SyncHook
-//     ) {
-//     "use strict";
-//     var _context;
-//     var _x = this._x;
-//     var _fn0 = _x[0];
-//     _fn0(SyncHook);
-//     var _fn1 = _x[1];
-//     _fn1(SyncHook);
-//     var _fn2 = _x[2];
-//     _fn2(SyncHook);
+(function anonymous(SyncHook
+    ) {
+    "use strict";
+    var _context;
+    var _x = this._x;
+    var _fn0 = _x[0];
+    _fn0(SyncHook);
+    var _fn1 = _x[1];
+    _fn1(SyncHook);
+    var _fn2 = _x[2];
+    _fn2(SyncHook);
     
-// })
+})

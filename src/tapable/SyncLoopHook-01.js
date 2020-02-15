@@ -38,33 +38,33 @@ console.log('third');
 hook.call('tapable', 'siven');
 
 
-// (function anonymous(SyncLoopHook) {
-//     "use strict";
-//     var _context;
-//     var _x = this._x;
-//     var _loop;
-//     do {
-//         _loop = false;
-//         var _fn0 = _x[0];
-//         var _result0 = _fn0(SyncLoopHook);
-//         if (_result0 !== undefined) {
-//             _loop = true;
-//         } else {
-//             var _fn1 = _x[1];
-//             var _result1 = _fn1(SyncLoopHook);
-//             if (_result1 !== undefined) {
-//                 _loop = true;
-//             } else {
-//                 var _fn2 = _x[2];
-//                 var _result2 = _fn2(SyncLoopHook);
-//                 if (_result2 !== undefined) {
-//                     _loop = true;
-//                 } else {
-//                     if (!_loop) {}
-//                 }
-//             }
-//         }
-//     } while (_loop);
+(function anonymous(SyncLoopHook) {
+    "use strict";
+    var _context;
+    var _x = this._x;
+    var _loop;
+    do {
+        _loop = false;
+        var _fn0 = _x[0];
+        var _result0 = _fn0(SyncLoopHook);
+        if (_result0 !== undefined) {
+            _loop = true;
+        } else {
+            var _fn1 = _x[1];
+            var _result1 = _fn1(SyncLoopHook);
+            if (_result1 !== undefined) {
+                _loop = true;
+            } else {
+                var _fn2 = _x[2];
+                var _result2 = _fn2(SyncLoopHook);
+                if (_result2 !== undefined) {
+                    _loop = true;
+                } else {
+                    if (!_loop) {}
+                }
+            }
+        }
+    } while (_loop);
 
-// }
-// )
+}
+)
