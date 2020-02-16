@@ -8,7 +8,7 @@
  */
 export const a = 1;
 const b = 2;
-export function test(){
-    console.log("test");
+export function test() {
+  console.log("test");
 }
 export default b;

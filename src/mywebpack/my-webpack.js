@@ -7,44 +7,75 @@
  * @FilePath: /webpack-learning/src/mywebpack/my-webpack.js
  */
 
-const fs = require('fs');
-const path = require('path');
-const babylon  =require('babylon');
-const babel = require('babel-core');
+const fs = require("fs");
+const path = require("path");
+const babylon = require("babylon");
+const babel = require("babel-core");
+const express = require('express');
 
-function build({entryFile,outputFolder}){
-    // 构建依赖图
-    const graph  = createDependencyGraph(entryFile);
-    // 构建资源
-    const outputFiles = bundle(graph);
 
-    // 生成资源文件
 
-    for (const outputFile of outputFiles){
-        fs.writeFileSync(
-            path.join(outputFolder,outputFile.name),
-            outputFile.content,
-            'utf-8'
-        );
+function _build({ entryFile, htmlTemplatePath }) {
+  // build dependency graph
+  const graph = createDependencyGraph(entryFile);
+  // bundle the asset
+  const outputFiles = bundle(graph);
+  outputFiles.push(generateHTMLTemplate(htmlTemplatePath, outputFiles));
+  return { outputFiles, graph };
+}
+
+function build({ entryFile, outputFolder, htmlTemplatePath }) {
+  const { outputFiles } = _build({ entryFile, htmlTemplatePath });
+  // write to output folder
+  for (const outputFile of outputFiles) {
+    fs.writeFileSync(
+      path.join(outputFolder, outputFile.name),
+      outputFile.content,
+      'utf-8'
+    );
+  }
+}
+
+function dev({ entryFile, outputFolder, htmlTemplatePath, devServerOptions }) {
+  const { outputFiles } = _build({ entryFile, htmlTemplatePath });
+
+  // create a map of [filename] -> content
+  const outputFileMap = {};
+  for (const outputFile of outputFiles) {
+    outputFileMap[outputFile.name] = outputFile.content;
+  }
+  const indexHtml = outputFileMap['index.html'];
+
+  const app = express();
+  app.use((req, res) => {
+    // trim off preceding slash '/'
+    const requestFile = req.path.slice(1);
+    if (outputFileMap[requestFile]) {
+      return res.send(outputFileMap[requestFile]);
     }
+    res.send(indexHtml);
+  });
+  app.listen(devServerOptions.port, () =>
+    console.log(
+      `Dev server starts at http://localhost:${devServerOptions.port}`
+    )
+  );
 }
 
-function createDependencyGraph(entryFile){
-    const rootMoudle = createModule(entryFile);
-    return rootMoudle;
-}
-
-
-// 解析路径
-function resolveRequest(requester, requestPath) {
-    return path.join(path.dirname(requester), requestPath);
+function createDependencyGraph(entryFile) {
+  const rootModule = createModule(entryFile);
+  return rootModule;
 }
 
 const MODULE_CACHE = new Map();
-
 function createModule(filePath) {
   if (!MODULE_CACHE.has(filePath)) {
-    const module = new Module(filePath);
+    const fileExtension = path.extname(filePath);
+    const ModuleCls = MODULE_LOADERS[fileExtension];
+    if (!ModuleCls) {
+      throw new Error(`Unsupported extension "${fileExtension}".`);
+    }
+    const module = new ModuleCls(filePath);
     MODULE_CACHE.set(filePath, module);
     module.initDependencies();
   }
@@ -55,22 +86,40 @@ class Module {
   constructor(filePath) {
     this.filePath = filePath;
     this.content = fs.readFileSync(filePath, 'utf-8');
+    this.transform();
+  }
+  initDependencies() {
+    this.dependencies = [];
+  }
+  transform() {}
+  transformModuleInterface() {}
+}
+
+class JSModule extends Module {
+  constructor(filePath) {
+    super(filePath);
     this.ast = babylon.parse(this.content,{
-        sourceType:'module'
+      sourceType:'module'
     });
   }
   initDependencies() {
     this.dependencies = this.findDependencies();
   }
-  
   findDependencies() {
-    return this.ast.program.body
-      .filter(node => node.type === 'ImportDeclaration')
-      .map(node => node.source.value)
-      .map(relativePath => resolveRequest(this.filePath, relativePath))
-      .map(absolutePath => createModule(absolutePath));
-  }
+    const importDeclarations = this.ast.program.body.filter(
+      node => node.type === 'ImportDeclaration'
+    );
+    const dependencies = [];
+    for (const importDeclaration of importDeclarations) {
+      const requestPath = importDeclaration.source.value;
+      const resolvedPath = resolveRequest(this.filePath, requestPath);
+      dependencies.push(createModule(resolvedPath));
 
+      //replace the request path to the resolved path
+      importDeclaration.source.value = resolvedPath;
+    }
+    return dependencies;
+  }
   transformModuleInterface() {
     const { types: t } = babel;
     const { filePath } = this;
@@ -109,12 +158,7 @@ class Module {
                     t.variableDeclarator(
                       newIdentifier,
                       t.callExpression(t.identifier('require'), [
-                        t.stringLiteral(
-                          resolveRequest(
-                            filePath,
-                            path.get('source.value').node
-                          )
-                        ),
+                        path.get('source').node,
                       ])
                     ),
                   ])
@@ -143,7 +187,6 @@ class Module {
                       name: path.get('declaration.id').node,
                       value: t.toExpression(path.get('declaration').node),
                     });
-                    console.log(declarations)
                   } else {
                     path
                       .get('declaration.declarations')
@@ -188,6 +231,40 @@ class Module {
   }
 }
 
+class CSSModule extends Module {
+  transform() {
+    this.content = trim(`
+      const content = '${this.content.replace(/\n/g, '')}';
+      const style = document.createElement('style');
+      style.type = 'text/css';
+      if (style.styleSheet) style.styleSheet.cssText = content;
+      else style.appendChild(document.createTextNode(content));
+      document.head.appendChild(style);
+    `);
+  }
+}
+
+const MODULE_LOADERS = {
+  '.css': CSSModule,
+  '.js': JSModule,
+};
+
+// resolving
+function resolveRequest(requester, requestPath) {
+  if (requestPath[0] === '.') {
+    // relative import
+    return path.join(path.dirname(requester), requestPath);
+  } else {
+    const requesterParts = requester.split('/');
+    const requestPaths = [];
+    for (let i = requesterParts.length - 1; i > 0; i--) {
+      requestPaths.push(requesterParts.slice(0, i).join('/') + '/node_modules');
+    }
+    // absolute import
+    return require.resolve(requestPath, { paths: requestPaths });
+  }
+}
+
 // bundling
 function bundle(graph) {
   const modules = collectModules(graph);
@@ -215,7 +292,7 @@ function toModuleMap(modules) {
 
   for (const module of modules) {
     module.transformModuleInterface();
-    moduleMap += `"${module.filePath}": function(exports, require) { ${module.content} },`;
+    moduleMap += `"${module.filePath}": function(exports, require) { ${module.content}\n },`;
   }
 
   moduleMap += '}';
@@ -258,11 +335,29 @@ function trim(str) {
   return lines.map(line => line.replace(regex, '')).join('\n');
 }
 
+function generateHTMLTemplate(htmlTemplatePath, outputFiles) {
+  let htmlTemplate = fs.readFileSync(htmlTemplatePath, 'utf-8');
+  htmlTemplate = htmlTemplate.replace(
+    '</body>',
+    outputFiles.map(({ name }) => `<script src="/${name}"></script>`).join('') +
+      '</body>'
+  );
+  return { name: 'index.html', content: htmlTemplate };
+}
 
-build({
-    entryFile: path.join(__dirname, './src/index.js'),
-    outputFolder: path.join(__dirname, './output'),
-  });
 
 
+// build({
+//   entryFile: path.join(__dirname, "./src/index.js"),
+//   outputFolder: path.join(__dirname, "./output")
+// });
 
+
+dev({
+  entryFile: path.join(__dirname, "./src/index.js"),
+  outputFolder: path.join(__dirname, './output'),
+  htmlTemplatePath: path.join(__dirname, './src/index.html'),
+  devServerOptions: {
+    port: 3000,
+  },
+});

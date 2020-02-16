@@ -7,39 +7,46 @@
  * @FilePath: /webpack-learning/src/tapable/SyncHook-01.js
  */
 const { SyncHook } = require("tapable");
-const hook = new SyncHook(['SyncHook']); // 创建钩子对象
+const hook = new SyncHook(["SyncHook"]); // 创建钩子对象
 
-hook.tap({
-    name: 'first',
-}, (params) => {
-    console.log('first')
-})
+hook.tap(
+  {
+    name: "first"
+  },
+  params => {
+    console.log("first");
+  }
+);
 
-hook.tap({
-    name: 'second',
-    before: 'first',
-}, (params) => {
-    console.log('second')
-})
+hook.tap(
+  {
+    name: "second",
+    before: "first"
+  },
+  params => {
+    console.log("second");
+  }
+);
 
-hook.tap({
- name: 'third',
- stage: -1
-}, (params) => {
- console.log('third')
-})
+hook.tap(
+  {
+    name: "third",
+    stage: -1
+  },
+  params => {
+    console.log("third");
+  }
+);
 
-hook.call('tapable', 'siven')
+hook.call("tapable", "siven")(
+  // function createCompileDelegate(name, type) {
+  // 	return function lazyCompileHook(...args) {
+  // 		this[name] = this._createCall(type);
+  // 		return this[name](...args);
+  // 	};
+  // }
 
-// function createCompileDelegate(name, type) {
-// 	return function lazyCompileHook(...args) {
-// 		this[name] = this._createCall(type);
-// 		return this[name](...args);
-// 	};
-// }
-
-(function anonymous(SyncHook
-    ) {
+  function anonymous(SyncHook) {
     "use strict";
     var _context;
     var _x = this._x;
@@ -49,5 +56,5 @@ hook.call('tapable', 'siven')
     _fn1(SyncHook);
     var _fn2 = _x[2];
     _fn2(SyncHook);
-    
-})
+  }
+);
