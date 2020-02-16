@@ -7,6 +7,6 @@
  * @FilePath: /webpack-learning/src/mywebpack/src/square.js
  */
 function area(side) {
-    return side * side;
-  }
-  export default area;
+  return side * side;
+}
+export default area;
